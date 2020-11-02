@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "55679428231",
+    "firebase_url": "https://whir-project.firebaseio.com",
+    "project_id": "whir-project",
+    "storage_bucket": "whir-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55679428231:android:92871a99328f6b5e9afa22",
+        "android_client_info": {
+          "package_name": "com.project.whir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55679428231-4uqtgbgeos0ip16eoe6d8fp52c0a7dfg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzBNGIwk5VwbifN8YnBzoS4J69S_PgX6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55679428231-4uqtgbgeos0ip16eoe6d8fp52c0a7dfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
