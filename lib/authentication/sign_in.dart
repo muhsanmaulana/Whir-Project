@@ -18,82 +18,107 @@ class _SingInState extends State<SingIn> {
 
   @override
   Widget build(BuildContext context) {
+    double tinggiLayar =
+        MediaQuery.of(context).size.height > MediaQuery.of(context).size.width
+            ? MediaQuery.of(context).size.height
+            : MediaQuery.of(context).size.width;
+
+    double lebarLayar =
+        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+            ? MediaQuery.of(context).size.height
+            : MediaQuery.of(context).size.width;
+
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red,
-          elevation: 0.0,
-          title: Text('Sign in to Whir'),
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.person),
-              label: Text('Sign Up'),
-              onPressed: () => widget.toggleView(),
-            ),
-          ],
-        ),
-        body: Container(
-            padding: EdgeInsets.symmetric(vertical: 80.0, horizontal: 20.0),
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 150.0,
-                      child: Image(
-                        image: AssetImage('assets/logo_t.png'),
+      body: SingleChildScrollView(
+        child: Container(
+          height: tinggiLayar,
+          padding: EdgeInsets.symmetric(vertical: 80.0, horizontal: 50.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 150.0,
+                  child: Image(
+                    image: AssetImage('assets/logo_t.png'),
+                  ),
+                ),
+                SizedBox(height: tinggiLayar / 10),
+                TextFormField(
+                  validator: (val) => val.isEmpty ? 'Masukkan email' : null,
+                  decoration: const InputDecoration(
+                      hintText: 'Masukkan email', labelText: 'Email '),
+                  onChanged: (val) {
+                    setState(() => email = val);
+                  },
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                TextFormField(
+                  validator: (val) => val.isEmpty ? 'Masukkan password' : null,
+                  decoration: const InputDecoration(
+                      hintText: 'Masukkan password', labelText: 'Password '),
+                  obscureText: true,
+                  onChanged: (val) {
+                    setState(() => password = val);
+                  },
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 15),
+                Container(
+                  width: lebarLayar,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(200),
+                  ),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        dynamic result = await _auth.signInWithEmailAndPassword(
+                            email, password);
+                        if (result == null) {
+                          setState(() {
+                            error = 'Gagal log in ';
+                          });
+                        }
+                      }
+                    },
+                    color: Colors.red,
+                    child: Text(
+                      "Sign In",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red, fontSize: 14.0),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don't have an account? "),
+                    FlatButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => widget.toggleView(),
+                      child: Text(
+                        "Register now!",
+                        style: TextStyle(
+                          color: Color(0xFFEE613A),
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      validator: (val) => val.isEmpty ? 'Masukkan email' : null,
-                      decoration: const InputDecoration(
-                          hintText: 'Masukkan email', labelText: 'Email '),
-                      onChanged: (val) {
-                        setState(() => email = val);
-                      },
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    TextFormField(
-                      validator: (val) =>
-                          val.isEmpty ? 'Masukkan password' : null,
-                      decoration: const InputDecoration(
-                          hintText: 'Masukkan password',
-                          labelText: 'Password '),
-                      obscureText: true,
-                      onChanged: (val) {
-                        setState(() => password = val);
-                      },
-                    ),
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                    SizedBox(
-                        width: double.infinity,
-                        height: 40.0,
-                        child: RaisedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                dynamic result =
-                                    await _auth.signInWithEmailAndPassword(
-                                        email, password);
-                                if (result == null) {
-                                  setState(() {
-                                    error = 'Gagal log in ';
-                                  });
-                                }
-                              }
-                            },
-                            color: Colors.red,
-                            child: Text("Sign In",
-                                style: TextStyle(color: Colors.white)))),
-                    SizedBox(height: 20.0),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red, fontSize: 14.0),
-                    )
                   ],
-                ))));
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
