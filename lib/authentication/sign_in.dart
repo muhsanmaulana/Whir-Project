@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'sign_up.dart';
 import 'package:hello_world/services/auth.dart';
 
 class SingIn extends StatefulWidget {

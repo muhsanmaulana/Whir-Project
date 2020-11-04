@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/Jelajah.dart';
-import 'package:hello_world/authentication/sign_in.dart';
-import 'package:hello_world/authentication/sign_up.dart';
 import 'package:hello_world/catatan.dart';
 import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
 import 'package:hello_world/tambah.dart';
+
+import 'jelajah.dart';
 
 class Navagation extends StatefulWidget {
   @override

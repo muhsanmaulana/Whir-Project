@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'sign_in.dart';
 import 'package:hello_world/services/auth.dart';
 
 class SingUp extends StatefulWidget {
@@ -16,6 +15,7 @@ class _SingUpState extends State<SingUp> {
   String email = '';
   String password = '';
   String error = '';
+  String name;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +43,19 @@ class _SingUpState extends State<SingUp> {
                           hintText: 'Masukkan email', labelText: 'Email '),
                       onChanged: (val) {
                         setState(() => email = val);
+                      },
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                      validator: (val) =>
+                          val.isEmpty ? 'Masukkan nama lengkap' : null,
+                      decoration: const InputDecoration(
+                          hintText: 'Masukkan nama lengkap',
+                          labelText: 'Nama Lengkap '),
+                      onChanged: (val) {
+                        setState(() => name = val);
                       },
                     ),
                     SizedBox(
