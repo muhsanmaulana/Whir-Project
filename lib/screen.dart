@@ -3,6 +3,8 @@ import 'package:hello_world/catatan.dart';
 import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
 import 'package:hello_world/tambah.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 import 'jelajah.dart';
 
@@ -31,6 +33,14 @@ class _NavagationState extends State<Navagation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_currentIndex],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _optionGambar(context);
+        },
+        backgroundColor: Colors.red,
+        child: Icon(Icons.camera_alt),
+        tooltip: 'Increment',
+      ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTappedBar,
         currentIndex: _currentIndex,
@@ -60,5 +70,76 @@ class _NavagationState extends State<Navagation> {
         ],
       ),
     );
+  }
+
+  void _optionGambar(context) {
+    File _image;
+    Future getImage() async {
+      final image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+      setState(() {
+        _image = image;
+      });
+    }
+
+    Future getGalery() async {
+      final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+      setState(() {
+        _image = image;
+      });
+    }
+
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0))),
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+              height: MediaQuery.of(context).size.height * 0.20,
+              child: Column(
+                children: [
+                  SizedBox(height: 10.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Tambah Catatan",
+                        style: TextStyle(
+                            fontSize: 15.0, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.photo),
+                              onPressed: getGalery,
+                            ),
+                            Text("Galeri")
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.camera_alt),
+                              onPressed: getImage,
+                            ),
+                            Text("Kamera")
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ));
+        });
   }
 }
