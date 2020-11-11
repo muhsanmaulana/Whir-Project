@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SingIn extends StatefulWidget {
   final Function toggleView;
@@ -39,12 +40,12 @@ class _SingInState extends State<SingIn> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 150.0,
+                  height: tinggiLayar / 6,
                   child: Image(
                     image: AssetImage('assets/logo_t.png'),
                   ),
                 ),
-                SizedBox(height: tinggiLayar / 10),
+                SizedBox(height: tinggiLayar / 15),
                 TextFormField(
                   validator: (val) => val.isEmpty ? 'Masukkan email' : null,
                   decoration: const InputDecoration(
@@ -83,6 +84,12 @@ class _SingInState extends State<SingIn> {
                           setState(() {
                             error = 'Gagal log in ';
                           });
+                        } else {
+                          String name = await _auth.getName(email: email);
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          sharedPreferences.setString("email", email);
+                          sharedPreferences.setString("name", name);
                         }
                       }
                     },

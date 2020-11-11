@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   final AuthService _auth = AuthService();
+  String email = "email";
+  String name = "name";
+
+  Future<String> getEmail() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("email") ?? "no email";
+  }
+
+  Future<String> getName() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("name") ?? "no name";
+  }
+
+  @override
+  void initState() {
+    getEmail().then((value) {
+      email = value;
+      setState(() {});
+    });
+    getName().then((value) {
+      name = value;
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +54,18 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                        backgroundImage: AssetImage('assets/profil_pic.jpg'),
+                        child: Text(name[0].toUpperCase()),
+                        backgroundColor: Color(0xFFEE613A),
                         radius: 35.0),
                     SizedBox(height: 5.0),
                     Text(
-                      'Muhsan Maulana',
+                      name,
                       style: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 5.0),
                     Text(
-                      'emailmuhsan@gmail.com',
+                      email,
                       style: TextStyle(fontSize: 12.0),
                     )
                   ],

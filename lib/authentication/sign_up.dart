@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SingUp extends StatefulWidget {
   final Function toggleView;
@@ -82,11 +83,18 @@ class _SingUpState extends State<SingUp> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 dynamic result = await _auth.registerEmailPass(
-                                    email, password);
+                                    email: email,
+                                    password: password,
+                                    name: name);
                                 if (result == null) {
                                   setState(() {
                                     error = 'Masukkan email valid';
                                   });
+                                } else {
+                                  SharedPreferences sharedPreferences =
+                                      await SharedPreferences.getInstance();
+                                  sharedPreferences.setString("email", email);
+                                  sharedPreferences.setString("name", name);
                                 }
                               }
                             },
