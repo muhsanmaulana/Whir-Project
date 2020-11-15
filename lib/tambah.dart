@@ -21,18 +21,9 @@ class _TambbahState extends State<Tambbah> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah'),
+        title: Text('Linimasa'),
         backgroundColor: Colors.red,
         elevation: 0.0,
-      ),
-      body: Center(
-          child:
-              _image == null ? Text("Image tidak loaded") : Image.file(_image)),
-      floatingActionButton: FloatingActionButton(
-        onPressed: getImage,
-        backgroundColor: Colors.red,
-        child: Icon(Icons.camera_alt),
-        tooltip: 'Increment',
       ),
     );
   }
