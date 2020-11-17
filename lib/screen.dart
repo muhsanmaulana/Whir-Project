@@ -56,8 +56,8 @@ class _NavagationState extends State<Navagation> {
               label: 'Jelajah',
               backgroundColor: Colors.red),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Tambah',
+              icon: Icon(Icons.circle),
+              label: 'Linimasa',
               backgroundColor: Colors.red),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
