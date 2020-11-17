@@ -25,12 +25,11 @@ class _NotifikasiState extends State<Notifikasi> {
               child: new Column(
                 children: <Widget>[
                   new Container(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: new Text(
-                      'Muhsan Maulana telah mengunggah 5 berkas baru pada folder Soal UTS 2016',
-                      style: new TextStyle(fontSize: 15.0),
-                    ),
-                  ),
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: new Text(
+                        'Muhsan Maulana telah mengunggah 5 berkas baru pada folder Soal UTS 2016',
+                        style: new TextStyle(fontSize: 15.0),
+                      )),
                   new Container(
                     padding: EdgeInsets.all(5.0),
                     child: Align(
