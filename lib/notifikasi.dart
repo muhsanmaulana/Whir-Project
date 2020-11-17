@@ -19,11 +19,7 @@ class _NotifikasiState extends State<Notifikasi> {
           new ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(25),
-<<<<<<< HEAD
-              child: new Image.asset('img/florin.png'),
-=======
               child: new Image.asset('assets/profil_pic.jpg'),
->>>>>>> 50ee854efea53430410be95a5e7843a84a33d70a
             ),
             title: new Container(
               child: new Column(
@@ -31,11 +27,7 @@ class _NotifikasiState extends State<Notifikasi> {
                   new Container(
                     padding: EdgeInsets.only(top: 8.0),
                     child: new Text(
-<<<<<<< HEAD
-                      'Florin Karmina telah mengunggah 5 berkas baru pada folder Soal UTS 2016',
-=======
                       'Muhsan Maulana telah mengunggah 5 berkas baru pada folder Soal UTS 2016',
->>>>>>> 50ee854efea53430410be95a5e7843a84a33d70a
                       style: new TextStyle(fontSize: 15.0),
                     ),
                   ),
