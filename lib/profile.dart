@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/user.dart';
+import 'package:hello_world/multiform.dart';
 import 'package:hello_world/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -164,6 +165,23 @@ class _ProfilePageState extends State<ProfilePage> {
                             onPressed: () {},
                             color: Colors.red,
                             child: Text("Edit Profil",
+                                style: TextStyle(color: Colors.white)))),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    SizedBox(
+                        width: double.infinity,
+                        height: 30.0,
+                        child: RaisedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MultiForm()),
+                              );
+                            },
+                            color: Colors.red,
+                            child: Text("Binder",
                                 style: TextStyle(color: Colors.white)))),
                     SizedBox(
                       height: 10.0,

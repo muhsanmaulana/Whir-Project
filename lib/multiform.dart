@@ -29,7 +29,7 @@ class _MyAppState extends State<MultiForm> {
   }
 
   submitData() {
-    floatingIcon = new Icon(Icons.arrow_back);
+    // floatingIcon = new Icon(Icons.arrow_back);
     data = [];
     listDynamic.forEach((widget) => data.add(widget.controller.text));
     setState(() {});
@@ -84,6 +84,15 @@ class _MyAppState extends State<MultiForm> {
         appBar: new AppBar(
           title: new Text('Daftar Binder'),
           backgroundColor: Colors.red,
+          actions: <Widget>[
+            FlatButton.icon(
+              icon: Icon(Icons.add_box),
+              label: Text(
+                'Tambah Binder',
+              ),
+              onPressed: addDynamic,
+            ),
+          ],
         ),
         body: new Container(
           margin: new EdgeInsets.all(10.0),
@@ -94,12 +103,6 @@ class _MyAppState extends State<MultiForm> {
             ],
           ),
         ),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: addDynamic,
-          child: floatingIcon,
-          backgroundColor: Colors.red,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       ),
     );
   }
