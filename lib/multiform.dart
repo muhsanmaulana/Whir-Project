@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(new MultiForm());
 
@@ -10,13 +12,13 @@ class MultiForm extends StatefulWidget {
 class _MyAppState extends State<MultiForm> {
   List<DynamicWidget> listDynamic = [];
   List<String> data = [];
+  String userEmail;
 
   Icon floatingIcon = new Icon(Icons.add);
 
   addDynamic() {
     if (data.length != 0) {
       floatingIcon = new Icon(Icons.add);
-
       data = [];
       listDynamic = [];
       print('if');
@@ -29,11 +31,38 @@ class _MyAppState extends State<MultiForm> {
   }
 
   submitData() {
-    // floatingIcon = new Icon(Icons.arrow_back);
     data = [];
     listDynamic.forEach((widget) => data.add(widget.controller.text));
     setState(() {});
     print(data.length);
+    sendData(data);
+  }
+
+  Future<String> getEmail() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("email") ?? "no email";
+  }
+
+  sendData(List<String> data) async {
+    CollectionReference collectionReference =
+        Firestore.instance.collection("Binders");
+
+    try {
+      await collectionReference
+          .document(userEmail == "no email" ? "hello2@gmail.com" : userEmail)
+          .setData({"binder": data});
+    } catch (e) {
+      print("Error");
+    }
+  }
+
+  @override
+  void initState() {
+    getEmail().then((value) {
+      userEmail = value;
+      setState(() {});
+    });
+    super.initState();
   }
 
   @override
@@ -109,7 +138,7 @@ class _MyAppState extends State<MultiForm> {
 }
 
 class DynamicWidget extends StatelessWidget {
-  TextEditingController controller = new TextEditingController();
+  final TextEditingController controller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {

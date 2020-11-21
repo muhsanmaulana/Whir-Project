@@ -246,6 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildList() {
+    // ignore: prefer_is_not_empty
     if (!(_searchText.isEmpty)) {
       List tempList = new List();
       for (int i = 0; i < filteredNames.length; i++) {

@@ -31,6 +31,12 @@ class _NavagationState extends State<Navagation> {
   }
 
   @override
+  void initState() {
+    setState(() {});
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_currentIndex],
