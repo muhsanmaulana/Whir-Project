@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hello_world/notifikasi.dart';
+import 'package:hello_world/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Catatan extends StatefulWidget {
@@ -41,28 +43,29 @@ class _CatatanState extends State<Catatan> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Catatan'),
-        backgroundColor: Colors.red,
-        elevation: 0.0,
-      ),
-      body: Container(
-        color: Colors.red,
-        child: DefaultTabController(
+    return MaterialApp(
+      home: DefaultTabController(
           length: tabs.length == 0 ? 1 : tabs.length,
-          child: TabBar(
-            indicatorColor: Colors.red[100],
-            tabs: tabs.length == 0
-                ? [
-                    Tab(
-                      text: "No Folder",
-                    )
-                  ]
-                : tabs,
-          ),
-        ),
-      ),
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.red,
+              bottom: TabBar(
+                indicatorColor: Colors.red[100],
+                tabs: tabs.length == 0
+                    ? [
+                        Tab(
+                          text: "No Folder",
+                        )
+                      ]
+                    : tabs,
+              ),
+            ),
+            body: TabBarView(children: [
+              ListView(),
+              ListView(),
+              ListView(),
+            ]),
+          )),
     );
   }
 }
