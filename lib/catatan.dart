@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hello_world/binder/daftarcat.dart';
 import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +49,7 @@ class _CatatanState extends State<Catatan> {
           length: tabs.length == 0 ? 1 : tabs.length,
           child: Scaffold(
             appBar: AppBar(
+              title: Text("Catatan"),
               backgroundColor: Colors.red,
               bottom: TabBar(
                 indicatorColor: Colors.red[100],
@@ -61,7 +63,7 @@ class _CatatanState extends State<Catatan> {
               ),
             ),
             body: TabBarView(children: [
-              ListView(),
+              PinterestGrid(),
               ListView(),
               ListView(),
             ]),

@@ -4,6 +4,7 @@ import 'package:hello_world/multiform.dart';
 import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
 import 'package:hello_world/tambah.dart';
+import 'package:hello_world/uploaddetail.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,7 +20,7 @@ class _NavagationState extends State<Navagation> {
   final List<Widget> _children = [
     Catatan(),
     Jelajah(),
-    MultiForm(),
+    Detail(),
     Notifikasi(),
     ProfilePage(),
   ];
