@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_world/binder/daftarcat.dart';
-import 'package:hello_world/notifikasi.dart';
-import 'package:hello_world/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Catatan extends StatefulWidget {
@@ -62,11 +60,16 @@ class _CatatanState extends State<Catatan> {
                     : tabs,
               ),
             ),
-            body: TabBarView(children: [
-              PinterestGrid(),
-              ListView(),
-              ListView(),
-            ]),
+            body: tabs.length == 0
+                ? Container(
+                    child: Center(
+                      child: Text("No File"),
+                    ),
+                  )
+                : TabBarView(children: [
+                    PinterestGrid(),
+                    ListView(),
+                  ]),
           )),
     );
   }

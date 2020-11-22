@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/catatan.dart';
 import 'package:hello_world/multiform.dart';
@@ -88,6 +89,15 @@ class _NavagationState extends State<Navagation> {
       setState(() {
         _image = image;
       });
+
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) => Detail(
+            image: image,
+          ),
+        ),
+      );
     }
 
     Future getGalery() async {
@@ -96,6 +106,14 @@ class _NavagationState extends State<Navagation> {
       setState(() {
         _image = image;
       });
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) => Detail(
+            image: image,
+          ),
+        ),
+      );
     }
 
     showModalBottomSheet(
