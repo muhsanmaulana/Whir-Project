@@ -10,6 +10,7 @@ class Catatan extends StatefulWidget {
 
 class _CatatanState extends State<Catatan> {
   List<Widget> tabs = [];
+  List<Widget> binder = [];
 
   Future<dynamic> _getFolders() async {
     CollectionReference collection = Firestore.instance.collection("Binders");
@@ -34,6 +35,7 @@ class _CatatanState extends State<Catatan> {
           tabs.add(Tab(
             text: item.toString(),
           ));
+          binder.add(item);
         }
       });
     });
@@ -67,9 +69,7 @@ class _CatatanState extends State<Catatan> {
                     ),
                   )
                 : TabBarView(children: [
-                    PinterestGrid(),
-                    ListView(),
-                    ListView(),
+                    for (int i = 1; i < 4; i++) PinterestGrid(),
                   ]),
           )),
     );

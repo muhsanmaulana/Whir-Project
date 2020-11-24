@@ -36,6 +36,7 @@ class _MyAppState extends State<MultiForm> {
     setState(() {});
     print(data.length);
     sendData(data);
+    kirimData(data);
   }
 
   Future<String> getEmail() async {
@@ -51,6 +52,23 @@ class _MyAppState extends State<MultiForm> {
       await collectionReference
           .document(userEmail == "no email" ? "hello2@gmail.com" : userEmail)
           .setData({"binder": data});
+    } catch (e) {
+      print("Error");
+    }
+  }
+
+  kirimData(List<String> data) async {
+    CollectionReference collectionReference =
+        Firestore.instance.collection("BinderList");
+
+    try {
+      for (int i = 0; i < data.length; i++) {
+        await collectionReference
+            .document(userEmail == "no email" ? "hello2@gmail.com" : userEmail)
+            .collection(data[i])
+            .document("gambar")
+            .setData({"binder": data});
+      }
     } catch (e) {
       print("Error");
     }
