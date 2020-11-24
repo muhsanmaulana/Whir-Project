@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path/path.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,10 @@ class _DetailState extends State<Detail> {
   List<Widget> opsi = [];
   List<String> binder = [];
   String selectedRadio;
+  String userEmail;
+  String namaCatatan = "";
+
+  TextEditingController namaCat = new TextEditingController();
 
   Future<dynamic> _getFolders() async {
     CollectionReference collection = Firestore.instance.collection("Binders");
@@ -38,10 +43,28 @@ class _DetailState extends State<Detail> {
     return pref.getString("email") ?? "no email";
   }
 
+  kirimData(String x, String y, String z) async {
+    CollectionReference collectionReference =
+        Firestore.instance.collection("BinderList");
+
+    try {
+      await collectionReference
+          .document(userEmail == "no email" ? "hello2@gmail.com" : userEmail)
+          .collection(y)
+          .document(z)
+          .setData({"link": x});
+    } catch (e) {
+      print("Error");
+    }
+  }
+
   @override
   void initState() {
     selectedRadio = "";
-
+    getEmail().then((value) {
+      userEmail = value;
+      setState(() {});
+    });
     _getFolders().then((value) {
       setState(() {
         for (var item in value) {
@@ -82,6 +105,19 @@ class _DetailState extends State<Detail> {
                       ))
                     : Image.file(widget.image),
               ),
+              SizedBox(height: 10.0),
+
+              Container(
+                child: Form(
+                    child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: namaCat,
+                      decoration: InputDecoration(hintText: 'Nama Catatan'),
+                    ),
+                  ],
+                )),
+              ),
 
               SizedBox(height: 20.0),
 
@@ -97,6 +133,7 @@ class _DetailState extends State<Detail> {
                       setState(() {
                         print(value);
                         setSelectedRadio(value);
+                        namaCatatan = namaCat.text;
                       });
                     },
                   )
@@ -130,6 +167,8 @@ class _DetailState extends State<Detail> {
                             await event.snapshot.ref.getDownloadURL();
 
                         print(downloadUrl);
+                        kirimData(downloadUrl.toString(),
+                            selectedRadio.toString(), namaCatatan.toString());
                         scaffoldState.currentState.showSnackBar(SnackBar(
                           content: Text('Photo uploaded successfully'),
                         ));
@@ -152,3 +191,7 @@ class Firebase {
     return await Firebase.initializeApp();
   }
 }
+
+// Future<String> uploadImage() async {
+//   StorageReference ref = FirebaseStorage.instance.ref().child(path);
+// }

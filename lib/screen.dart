@@ -83,6 +83,7 @@ class _NavagationState extends State<Navagation> {
 
   void _optionGambar(context) {
     File _image;
+    String filename;
     Future getImage() async {
       final image = await ImagePicker.pickImage(source: ImageSource.camera);
 

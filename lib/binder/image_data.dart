@@ -13,7 +13,8 @@ class ImageData {
 const imageList = [
   ImageData(
     id: 'id-001',
-    imageUrl: 'https://picsum.photos/seed/image001/500/500',
+    imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/whir-project.appspot.com/o/images%2F9cdbcbf9-5433-4eff-9509-c53c278c16676486094222622825243.jpg?alt=media&token=f1ae6661-0954-4956-8dd7-5c4ca12f5126',
   ),
   ImageData(
     id: 'id-002',
