@@ -69,6 +69,7 @@ class _CatatanState extends State<Catatan> {
                 : TabBarView(children: [
                     PinterestGrid(),
                     ListView(),
+                    ListView(),
                   ]),
           )),
     );

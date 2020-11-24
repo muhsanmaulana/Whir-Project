@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Detail extends StatefulWidget {
   final File image;
@@ -17,7 +19,45 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
 
+  List<Widget> opsi = [];
+  List<String> binder = [];
+  String selectedRadio;
+
+  Future<dynamic> _getFolders() async {
+    CollectionReference collection = Firestore.instance.collection("Binders");
+
+    String userEmail = await getEmail();
+
+    var result = await collection.document(userEmail).get();
+
+    return result.data["binder"];
+  }
+
+  Future<String> getEmail() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("email") ?? "no email";
+  }
+
   @override
+  void initState() {
+    selectedRadio = "";
+
+    _getFolders().then((value) {
+      setState(() {
+        for (var item in value) {
+          binder.add(item);
+        }
+      });
+    });
+    super.initState();
+  }
+
+  setSelectedRadio(String val) {
+    setState(() {
+      selectedRadio = val;
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldState,
@@ -42,6 +82,26 @@ class _DetailState extends State<Detail> {
                       ))
                     : Image.file(widget.image),
               ),
+
+              SizedBox(height: 20.0),
+
+              Text("Pilih Binder"),
+              Column(children: <Widget>[
+                for (var item in binder)
+                  RadioListTile(
+                    title: Text(item.toString()),
+                    value: item,
+                    groupValue: selectedRadio,
+                    activeColor: Colors.red,
+                    onChanged: (value) {
+                      setState(() {
+                        print(value);
+                        setSelectedRadio(value);
+                      });
+                    },
+                  )
+              ]),
+
               SizedBox(height: 20.0),
               Container(),
               FlatButton(
