@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Column(
                               children: [
                                 Text(
-                                  '32',
+                                  '0',
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold),
@@ -139,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Column(
                               children: [
                                 Text(
-                                  '32',
+                                  '0',
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold),
