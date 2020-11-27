@@ -3,51 +3,72 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_world/binder/daftarcat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'binder/image_data.dart';
+
 class Catatan extends StatefulWidget {
+  final String userEmail;
+
+  const Catatan({this.userEmail});
   @override
   _CatatanState createState() => _CatatanState();
 }
 
 class _CatatanState extends State<Catatan> {
   List<Widget> tabs = [];
-  List<String> binder = [];
-  List<PinterestGrid> pinterestScreens = [];
+  var names = [];
+  List<Widget> pinterestScreens = [];
 
   Future<dynamic> _getFolders() async {
     CollectionReference collection = Firestore.instance.collection("Binders");
 
-    String userEmail = await getEmail();
-
-    var result = await collection.document(userEmail).get();
+    var result = await collection.document(widget.userEmail).get();
 
     return result.data["binder"];
   }
 
-  Future<String> getEmail() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getString("email") ?? "no email";
+  loadPinterestScreens() {
+    for (var name in names) {
+      pinterestScreens.add(
+        PinterestGrid(
+          binderName: name,
+          userEmail: widget.userEmail,
+        ),
+      );
+    }
   }
 
   @override
   void initState() {
     _getFolders().then((value) {
-      setState(() {
+      if (value != null) {
         for (var item in value) {
           tabs.add(Tab(
             text: item.toString(),
           ));
-          pinterestScreens.add(PinterestGrid(
-            binderName: item.toString(),
-          ));
-          binder.add(item.toString());
+          names.add(item.toString());
         }
-      });
+
+        for (var name in names) {
+          pinterestScreens.add(
+            PinterestGrid(
+              binderName: name,
+              userEmail: widget.userEmail,
+            ),
+          );
+        }
+        setState(() {});
+      }
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("UserEmail : ${widget.userEmail} from catatan");
+    print("Tabs length form catatan : ${tabs.length}");
+    print("names length form catatan : ${names.length}");
+    print("pinterestScreens length form catatan : ${pinterestScreens.length}");
+
     return MaterialApp(
       home: DefaultTabController(
           length: tabs.length == 0 ? 1 : tabs.length,
@@ -73,7 +94,25 @@ class _CatatanState extends State<Catatan> {
                     ),
                   )
                 : TabBarView(
-                    children: pinterestScreens,
+                    children: pinterestScreens.length == 0
+                        ? [
+                            Container(
+                              child: Center(
+                                child: Text("No File"),
+                              ),
+                            ),
+                            Container(
+                              child: Center(
+                                child: Text("No File"),
+                              ),
+                            ),
+                            Container(
+                              child: Center(
+                                child: Text("No File"),
+                              ),
+                            ),
+                          ]
+                        : pinterestScreens,
                   ),
           )),
     );

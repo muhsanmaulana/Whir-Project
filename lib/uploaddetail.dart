@@ -5,8 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path/path.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Detail extends StatefulWidget {
@@ -43,16 +41,16 @@ class _DetailState extends State<Detail> {
     return pref.getString("email") ?? "no email";
   }
 
-  kirimData(String x, String y, String z) async {
+  kirimData(String downloadUrl, String binderName, String fileName) async {
     CollectionReference collectionReference =
         Firestore.instance.collection("BinderList");
 
     try {
       await collectionReference
           .document(userEmail == "no email" ? "hello2@gmail.com" : userEmail)
-          .collection(y)
-          .document(z)
-          .setData({"link": x});
+          .collection(binderName)
+          .document(fileName)
+          .setData({"link": downloadUrl});
     } catch (e) {
       print("Error");
     }
@@ -129,10 +127,10 @@ class _DetailState extends State<Detail> {
                     value: item,
                     groupValue: selectedRadio,
                     activeColor: Colors.red,
-                    onChanged: (value) {
+                    onChanged: (nothing) {
                       setState(() {
-                        print(value);
-                        setSelectedRadio(value);
+                        print(nothing);
+                        setSelectedRadio(item);
                         namaCatatan = namaCat.text;
                       });
                     },
@@ -147,35 +145,51 @@ class _DetailState extends State<Detail> {
                         Firebase.initializeApp();
                     CollectionReference collection =
                         Firestore.instance.collection("Binders");
+
                     FirebaseStorage _storage = FirebaseStorage.instance;
+
                     List<String> splitPath = widget.image.path.split('/');
                     String filename = splitPath[splitPath.length - 1];
+
                     StorageReference reference =
                         _storage.ref().child("images").child(filename);
+
                     StorageUploadTask uploadTask =
                         reference.putFile(widget.image);
+
                     StreamSubscription streamSubscription =
                         uploadTask.events.listen((event) async {
                       var eventType = event.type;
+
                       if (eventType == StorageTaskEventType.progress) {
+                        print("Nothing to do");
                       } else if (eventType == StorageTaskEventType.failure) {
-                        scaffoldState.currentState.showSnackBar(SnackBar(
-                          content: Text('Photo failed to upload'),
-                        ));
+                        scaffoldState.currentState.showSnackBar(
+                          SnackBar(
+                            content: Text('Photo failed to upload'),
+                          ),
+                        );
                       } else if (eventType == StorageTaskEventType.success) {
                         var downloadUrl =
                             await event.snapshot.ref.getDownloadURL();
 
                         print(downloadUrl);
-                        kirimData(downloadUrl.toString(),
-                            selectedRadio.toString(), namaCatatan.toString());
 
-                        scaffoldState.currentState.showSnackBar(SnackBar(
-                          content: Text('Photo uploaded successfully'),
-                        ));
+                        kirimData(
+                          downloadUrl.toString(),
+                          selectedRadio,
+                          namaCatatan,
+                        );
+
+                        scaffoldState.currentState.showSnackBar(
+                          SnackBar(
+                            content: Text('Photo uploaded successfully'),
+                          ),
+                        );
                       }
                     });
                     await uploadTask.onComplete;
+
                     streamSubscription.cancel();
                   },
                   color: Colors.red,

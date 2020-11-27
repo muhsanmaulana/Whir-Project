@@ -1,30 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/catatan.dart';
-import 'package:hello_world/multiform.dart';
 import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
-import 'package:hello_world/tambah.dart';
 import 'package:hello_world/uploaddetail.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'jelajah.dart';
 
 class Navagation extends StatefulWidget {
+  final String userEmail;
+
+  const Navagation({this.userEmail});
   @override
   _NavagationState createState() => _NavagationState();
 }
 
 class _NavagationState extends State<Navagation> {
   int _currentIndex = 0;
-  final List<Widget> _children = [
-    Catatan(),
-    Jelajah(),
-    Detail(),
-    Notifikasi(),
-    ProfilePage(),
-  ];
+  String userEmail;
 
   void onTappedBar(int index) {
     setState(() {
@@ -32,14 +28,32 @@ class _NavagationState extends State<Navagation> {
     });
   }
 
+  Future<String> getEmail() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("email");
+  }
+
   @override
   void initState() {
-    setState(() {});
+    getEmail().then((value) {
+      userEmail = value ?? "hello";
+      setState(() {});
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _children = [
+      Catatan(
+        userEmail: widget.userEmail,
+      ),
+      Jelajah(),
+      Detail(),
+      Notifikasi(),
+      ProfilePage(),
+    ];
     return Scaffold(
       body: _children[_currentIndex],
       floatingActionButton: FloatingActionButton(

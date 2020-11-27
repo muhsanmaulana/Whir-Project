@@ -1,18 +1,20 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ImageData {
   final String id;
   final String imageUrl;
+  static List<dynamic> dataImg;
 
   const ImageData({
     @required this.id,
     @required this.imageUrl,
   });
 
-  static Future<Map<String, dynamic>> getAllImageData(
+  static Future<List<ImageData>> getAllImageData(
       {String email, String binderName}) async {
     CollectionReference collectionReference =
         Firestore.instance.collection("BinderList");
@@ -20,9 +22,27 @@ class ImageData {
     var result = await collectionReference
         .document(email)
         .collection(binderName)
-        .document("gambar")
-        .get();
-    return result.data["binder"];
+        .getDocuments();
+
+    if (email == null) {
+      AlertDialog(
+        content: Text("Null Email"),
+      );
+    }
+
+    List<ImageData> listImage = [];
+
+    for (var document in result.documents) {
+      listImage.add(
+        ImageData(
+          id: result.documents.indexOf(document).toString(),
+          imageUrl: document["link"].toString(),
+        ),
+      );
+    }
+    print("Image_Data : ${listImage[0].imageUrl}");
+    dataImg = listImage;
+    return listImage;
   }
 }
 
