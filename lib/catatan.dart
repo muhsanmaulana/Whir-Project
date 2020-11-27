@@ -11,6 +11,7 @@ class Catatan extends StatefulWidget {
 class _CatatanState extends State<Catatan> {
   List<Widget> tabs = [];
   List<String> binder = [];
+  List<PinterestGrid> pinterestScreens = [];
 
   Future<dynamic> _getFolders() async {
     CollectionReference collection = Firestore.instance.collection("Binders");
@@ -35,6 +36,9 @@ class _CatatanState extends State<Catatan> {
           tabs.add(Tab(
             text: item.toString(),
           ));
+          pinterestScreens.add(PinterestGrid(
+            binderName: item.toString(),
+          ));
           binder.add(item.toString());
         }
       });
@@ -56,7 +60,7 @@ class _CatatanState extends State<Catatan> {
                 tabs: tabs.length == 0
                     ? [
                         Tab(
-                          text: "No Folder",
+                          text: "No Binder",
                         )
                       ]
                     : tabs,
@@ -68,11 +72,9 @@ class _CatatanState extends State<Catatan> {
                       child: Text("No File"),
                     ),
                   )
-                : TabBarView(children: [
-                    PinterestGrid(),
-                    PinterestGrid(),
-                    PinterestGrid(),
-                  ]),
+                : TabBarView(
+                    children: pinterestScreens,
+                  ),
           )),
     );
   }

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ImageData {
   final String id;
@@ -8,6 +11,19 @@ class ImageData {
     @required this.id,
     @required this.imageUrl,
   });
+
+  static Future<Map<String, dynamic>> getAllImageData(
+      {String email, String binderName}) async {
+    CollectionReference collectionReference =
+        Firestore.instance.collection("BinderList");
+
+    var result = await collectionReference
+        .document(email)
+        .collection(binderName)
+        .document("gambar")
+        .get();
+    return result.data;
+  }
 }
 
 const imageList = [

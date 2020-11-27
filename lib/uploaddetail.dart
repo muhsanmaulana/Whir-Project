@@ -169,6 +169,7 @@ class _DetailState extends State<Detail> {
                         print(downloadUrl);
                         kirimData(downloadUrl.toString(),
                             selectedRadio.toString(), namaCatatan.toString());
+
                         scaffoldState.currentState.showSnackBar(SnackBar(
                           content: Text('Photo uploaded successfully'),
                         ));

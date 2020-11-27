@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'image_data.dart';
 
 class StandardGrid extends StatelessWidget {
@@ -21,8 +22,26 @@ class StandardGrid extends StatelessWidget {
   }
 }
 
-class PinterestGrid extends StatelessWidget {
-  const PinterestGrid({Key key}) : super(key: key);
+class PinterestGrid extends StatefulWidget {
+  final String binderName;
+  const PinterestGrid({Key key, this.binderName}) : super(key: key);
+
+  @override
+  _PinterestGridState createState() => _PinterestGridState();
+}
+
+class _PinterestGridState extends State<PinterestGrid> {
+  Future<String> getEmailUser() async {
+    SharedPreferences memory = await SharedPreferences.getInstance();
+
+    return memory.getString("email");
+  }
+
+  @override
+  void initState() {
+    getEmailUser().then((value) {});
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
