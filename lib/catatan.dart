@@ -26,17 +26,6 @@ class _CatatanState extends State<Catatan> {
     return result.data["binder"];
   }
 
-  loadPinterestScreens() {
-    for (var name in names) {
-      pinterestScreens.add(
-        PinterestGrid(
-          binderName: name,
-          userEmail: widget.userEmail,
-        ),
-      );
-    }
-  }
-
   @override
   void initState() {
     _getFolders().then((value) {
@@ -50,9 +39,14 @@ class _CatatanState extends State<Catatan> {
 
         for (var name in names) {
           pinterestScreens.add(
-            PinterestGrid(
-              binderName: name,
-              userEmail: widget.userEmail,
+            Tab(
+              child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: PinterestGrid(
+                    binderName: name,
+                    userEmail: widget.userEmail,
+                  )),
             ),
           );
         }

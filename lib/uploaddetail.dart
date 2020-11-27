@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sweetalert/sweetalert.dart';
 
 class Detail extends StatefulWidget {
   final File image;
@@ -22,7 +23,9 @@ class _DetailState extends State<Detail> {
   List<String> binder = [];
   String selectedRadio;
   String userEmail;
+
   String namaCatatan = "";
+  bool isLoad = true;
 
   TextEditingController namaCat = new TextEditingController();
 
@@ -58,6 +61,14 @@ class _DetailState extends State<Detail> {
 
   @override
   void initState() {
+    if (widget.image != null) {
+      List<String> splitPath = widget.image.path.split('/');
+      namaCatatan = splitPath[splitPath.length - 1];
+    } else {
+      namaCatatan = "whir.png";
+    }
+    namaCat.text = namaCatatan;
+
     selectedRadio = "";
     getEmail().then((value) {
       userEmail = value;
@@ -162,7 +173,6 @@ class _DetailState extends State<Detail> {
                       var eventType = event.type;
 
                       if (eventType == StorageTaskEventType.progress) {
-                        print("Nothing to do");
                       } else if (eventType == StorageTaskEventType.failure) {
                         scaffoldState.currentState.showSnackBar(
                           SnackBar(
@@ -173,24 +183,36 @@ class _DetailState extends State<Detail> {
                         var downloadUrl =
                             await event.snapshot.ref.getDownloadURL();
 
-                        print(downloadUrl);
-
                         kirimData(
                           downloadUrl.toString(),
                           selectedRadio,
                           namaCatatan,
                         );
+                        setState(() {
+                          isLoad = false;
+                        });
 
-                        scaffoldState.currentState.showSnackBar(
-                          SnackBar(
-                            content: Text('Photo uploaded successfully'),
-                          ),
+                        SweetAlert.show(
+                          context,
+                          title: "Success 🎉",
+                          subtitle: "File was Uploaded succcessful",
+                          style: SweetAlertStyle.success,
                         );
+
+                        // Navigator.pop(context);
+
+                        // scaffoldState.currentState.showSnackBar(
+                        //   SnackBar(
+                        //     content: Text('Photo uploaded successfully'),
+                        //   ),
+                        // );
                       }
                     });
                     await uploadTask.onComplete;
 
                     streamSubscription.cancel();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   color: Colors.red,
                   textColor: Colors.white,
