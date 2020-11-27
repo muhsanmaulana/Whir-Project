@@ -22,7 +22,7 @@ class ImageData {
         .collection(binderName)
         .document("gambar")
         .get();
-    return result.data;
+    return result.data["binder"];
   }
 }
 
