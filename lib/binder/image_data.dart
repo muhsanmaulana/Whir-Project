@@ -40,7 +40,7 @@ class ImageData {
         ),
       );
     }
-    print("Image_Data : ${listImage[0].imageUrl}");
+    // print("Image_Data 🔥 : ${listImage[0].imageUrl}");
     dataImg = listImage;
     return listImage;
   }

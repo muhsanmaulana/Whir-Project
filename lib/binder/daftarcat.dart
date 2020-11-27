@@ -48,7 +48,6 @@ class _PinterestGridState extends State<PinterestGrid> {
   void initState() {
     setListofImage().then((value) {
       listOfImage = value;
-      print(value);
       setState(() {});
     });
 
@@ -60,10 +59,11 @@ class _PinterestGridState extends State<PinterestGrid> {
     setState(() {
       listOfImage = ImageData.dataImg;
     });
-    print("from daftarcat.dart : ${widget.binderName}");
-    setState(() {});
-    print(
-        "Length of ListofImage in daftarcat.dart : ${ImageData.dataImg == null ? 0 : ImageData.dataImg.length}");
+    // damn 👎 comments , but it works 👍.
+    // print("from daftarcat.dart : ${widget.binderName}");
+    // setState(() {});
+    // print(
+    //     "Length of ListofImage in daftarcat.dart : ${ImageData.dataImg == null ? 0 : ImageData.dataImg.length}");
 
     return StaggeredGridView.countBuilder(
       crossAxisCount: 2,

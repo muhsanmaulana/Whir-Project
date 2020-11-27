@@ -64,10 +64,11 @@ class _CatatanState extends State<Catatan> {
 
   @override
   Widget build(BuildContext context) {
-    print("UserEmail : ${widget.userEmail} from catatan");
-    print("Tabs length form catatan : ${tabs.length}");
-    print("names length form catatan : ${names.length}");
-    print("pinterestScreens length form catatan : ${pinterestScreens.length}");
+    // This is such a 👎 comments
+    // print("UserEmail : ${widget.userEmail} from catatan");
+    // print("Tabs length form catatan : ${tabs.length}");
+    // print("names length form catatan : ${names.length}");
+    // print("pinterestScreens length form catatan : ${pinterestScreens.length}");
 
     return MaterialApp(
       home: DefaultTabController(
