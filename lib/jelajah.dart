@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hello_world/binder/daftarcat.dart';
 
 class Jelajah extends StatefulWidget {
+  final String userEmail;
+
+  const Jelajah({this.userEmail});
   @override
   _JelajahState createState() => _JelajahState();
 }

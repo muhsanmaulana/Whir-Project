@@ -37,6 +37,7 @@ class _NavagationState extends State<Navagation> {
   void initState() {
     getEmail().then((value) {
       userEmail = value ?? "hello";
+      print("screen email : $value");
       setState(() {});
     });
 

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +6,7 @@ class ImageData {
   final String id;
   final String imageUrl;
   static List<dynamic> dataImg;
+  static List<dynamic> allImage;
 
   const ImageData({
     @required this.id,
@@ -41,8 +40,49 @@ class ImageData {
       );
     }
     // print("Image_Data 🔥 : ${listImage[0].imageUrl}");
-    dataImg = listImage;
+    // dataImg = listImage;
     return listImage;
+  }
+
+  static Future<List<ImageData>> getAllImageDataFromServer() async {
+    CollectionReference bindersRef = Firestore.instance.collection("binders");
+    CollectionReference usersRef = Firestore.instance.collection("users");
+
+    // Get all users email
+    var usersResult = await usersRef.getDocuments();
+    List<String> usersEmail = [];
+
+    for (var document in usersResult.documents) {
+      usersEmail.add(document.documentID);
+    }
+    print("Get All Email from server , From Image_data : ${usersEmail} ");
+
+    // for all user in usersEmail get all binder
+    for (var email in usersEmail) {
+      var bindersResult = await bindersRef.document(email).get();
+      var binderName = [];
+      for (var binder in bindersResult.data.values) {
+        binderName.add(binder.toString());
+      }
+
+      print("$email : $binderName");
+
+      for (var binder in binderName) {
+        List<ImageData> temp =
+            await getAllImageData(email: email, binderName: binder);
+        allImage = [...allImage, ...temp];
+      }
+    }
+
+    // if (email == null) {
+    //   AlertDialog(
+    //     content: Text("Null Email"),
+    //   );
+    // }
+
+    print("all Image_Data 🔥 : $allImage");
+
+    return allImage;
   }
 }
 

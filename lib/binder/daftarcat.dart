@@ -27,29 +27,12 @@ class PinterestGrid extends StatefulWidget {
   final String binderName;
   PinterestGrid({this.binderName, this.userEmail});
 
-  final DoubleHolder offset = new DoubleHolder();
-
-  double getOffsetMethod() {
-    // print('getOffsetMethod : ' + offset.value.toString());
-    return offset.value;
-  }
-
-  void setOffsetMethod(double val) {
-    print('offset : ' + offset.value.toString());
-    offset.value = val;
-  }
-
   @override
   _PinterestGridState createState() => _PinterestGridState();
 }
 
-class DoubleHolder {
-  double value = 0.0;
-}
-
 class _PinterestGridState extends State<PinterestGrid> {
   List<ImageData> listOfImage;
-  ScrollController controller;
 
   Future<String> getEmailUser() async {
     SharedPreferences memory = await SharedPreferences.getInstance();
@@ -64,7 +47,6 @@ class _PinterestGridState extends State<PinterestGrid> {
 
   @override
   void initState() {
-    controller = ScrollController()..addListener(_scrollListener);
     setListofImage().then((value) {
       listOfImage = value;
       setState(() {});
@@ -72,19 +54,6 @@ class _PinterestGridState extends State<PinterestGrid> {
 
     super.initState();
   }
-
-  //
-
-  void _scrollListener() {
-    widget.setOffsetMethod(controller.position.pixels);
-  }
-
-  void _forceScroll(double offset) {
-    controller.jumpTo(offset);
-    print('forceScroll to : ' + offset.toString());
-  }
-
-  //
 
   @override
   Widget build(BuildContext context) {
@@ -97,27 +66,48 @@ class _PinterestGridState extends State<PinterestGrid> {
     // print(
     //     "Length of ListofImage in daftarcat.dart : ${ImageData.dataImg == null ? 0 : ImageData.dataImg.length}");
 
-    return buildContainer();
+    return buildCustomScrollView();
   }
 
-  Widget buildContainer() {
+  Widget buildCustomScrollView() {
+    List<Widget> children = [];
+    for (var image in listOfImage) {
+      children.add(ImageCard(
+        imageData: image,
+      ));
+    }
+    Widget child = buildStaggeredGridView();
+    return Container(
+      child: CustomScrollView(
+        primary: false,
+        slivers: <Widget>[
+          SliverPadding(
+            padding: const EdgeInsets.all(0.0),
+            sliver: SliverGrid.count(
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10.0,
+              crossAxisCount: 2,
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildStaggeredGridView() {
     return StaggeredGridView.countBuilder(
-      controller: controller,
+      physics: ScrollPhysics(),
       crossAxisCount: 2,
       itemCount: listOfImage == null ? 0 : listOfImage.length,
-      itemBuilder: (context, index) => ListTile(
-        contentPadding: EdgeInsets.zero,
-        subtitle: Hero(
-          tag: index,
-          child: ImageCard(
-            imageData: listOfImage[index],
-          ),
-        ),
+      itemBuilder: (context, index) => ImageCard(
+        imageData: listOfImage[index],
       ),
       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
       mainAxisSpacing: 8.0,
       crossAxisSpacing: 8.0,
     );
+    ;
   }
 }
 
