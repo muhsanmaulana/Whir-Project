@@ -36,7 +36,7 @@ class PinterestGrid extends StatefulWidget {
   }
 
   void setOffsetMethod(double val) {
-    print('offset : ' + offset.value.toString());
+    // print('offset : ' + offset.value.toString());
     offset.value = val;
   }
 
@@ -95,7 +95,7 @@ class _PinterestGridState extends State<PinterestGrid> {
 
   void _forceScroll(double offset) {
     controller.jumpTo(offset);
-    print('forceScroll to : ' + offset.toString());
+    // print('forceScroll to : ' + offset.toString());
   }
 
   //
@@ -117,8 +117,10 @@ class _PinterestGridState extends State<PinterestGrid> {
   Widget buildCustomScrollView(List<ImageData> data) {
     List<Widget> children = [];
     for (var image in data) {
-      children.add(ImageCard(
-        imageData: image,
+      children.add(Container(
+        child: ImageCard(
+          imageData: image,
+        ),
       ));
     }
     return Container(
@@ -136,26 +138,6 @@ class _PinterestGridState extends State<PinterestGrid> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildContainer() {
-    return StaggeredGridView.countBuilder(
-      controller: controller,
-      crossAxisCount: 2,
-      itemCount: listOfImage == null ? 0 : listOfImage.length,
-      itemBuilder: (context, index) => ListTile(
-        contentPadding: EdgeInsets.zero,
-        subtitle: Hero(
-          tag: index,
-          child: ImageCard(
-            imageData: listOfImage[index],
-          ),
-        ),
-      ),
-      staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
     );
   }
 }

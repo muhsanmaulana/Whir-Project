@@ -55,7 +55,7 @@ class ImageData {
     for (var document in usersResult.documents) {
       usersEmail.add(document.documentID);
     }
-    print("Get All Email from server , From Image_data : ${usersEmail} ");
+    // print("Get All Email from server , From Image_data : ${usersEmail} ");
 
 // for all user in usersEmail get all binder
     for (var email in usersEmail) {
@@ -72,10 +72,10 @@ class ImageData {
       //   binderName.add(binder.toString());
       // }
 
-      print("$email : $binderName");
+      // print("$email : $binderName");
 
       if (binderName != null) {
-        print("binderName length : ${binderName.length}");
+        // print("binderName length : ${binderName.length}");
 
         if (binderName.length != 0) {
           binderName.forEach((element) {
@@ -84,7 +84,7 @@ class ImageData {
             // allImage = [...allImage, ...temp];
 
             getAllImageData(email: email, binderName: element).then((value) {
-              print("I'm inside");
+              // print("I'm inside");
               for (var data in value) {
                 allImage.add(data);
               }
@@ -100,7 +100,7 @@ class ImageData {
 // );
 // }
 
-    print("all Image_Data 🔥 : $allImage");
+    // print("all Image_Data 🔥 : $allImage");
 
     return allImage;
   }

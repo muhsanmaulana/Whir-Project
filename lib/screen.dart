@@ -54,43 +54,46 @@ class _NavagationState extends State<Navagation> {
       Notifikasi(),
       ProfilePage(),
     ];
-    return Scaffold(
-      body: _children[_currentIndex],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _optionGambar(context);
-        },
-        backgroundColor: Colors.red,
-        child: Icon(Icons.camera_alt),
-        tooltip: 'Increment',
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTappedBar,
-        currentIndex: _currentIndex,
-        backgroundColor: Colors.red,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Catatan',
-            backgroundColor: Colors.red,
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              label: 'Jelajah',
-              backgroundColor: Colors.red),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.circle),
-              label: 'Linimasa',
-              backgroundColor: Colors.red),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Notifikasi',
-              backgroundColor: Colors.red),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profil',
-              backgroundColor: Colors.red),
-        ],
+    return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.deepOrange),
+      home: Scaffold(
+        body: _children[_currentIndex],
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _optionGambar(context);
+          },
+          backgroundColor: Colors.red,
+          child: Icon(Icons.camera_alt),
+          tooltip: 'Increment',
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: onTappedBar,
+          currentIndex: _currentIndex,
+          backgroundColor: Colors.red,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Catatan',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.explore),
+                label: 'Jelajah',
+                backgroundColor: Colors.red),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.circle),
+                label: 'Linimasa',
+                backgroundColor: Colors.red),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notifikasi',
+                backgroundColor: Colors.red),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profil',
+                backgroundColor: Colors.red),
+          ],
+        ),
       ),
     );
   }

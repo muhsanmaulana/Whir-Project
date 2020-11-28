@@ -15,8 +15,11 @@ class _JelajahState extends State<Jelajah> {
           backgroundColor: Colors.red,
           elevation: 0.0,
         ),
-        body: PinterestGrid(
-          isAll: true,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: PinterestGrid(
+            isAll: true,
+          ),
         ));
   }
 }
