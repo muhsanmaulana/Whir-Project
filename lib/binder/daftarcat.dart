@@ -25,14 +25,32 @@ class StandardGrid extends StatelessWidget {
 class PinterestGrid extends StatefulWidget {
   final String userEmail;
   final String binderName;
-  PinterestGrid({this.binderName, this.userEmail});
+  final bool isAll;
+  PinterestGrid({this.binderName, this.userEmail, this.isAll = false});
+
+  final DoubleHolder offset = new DoubleHolder();
+
+  double getOffsetMethod() {
+    // print('getOffsetMethod : ' + offset.value.toString());
+    return offset.value;
+  }
+
+  void setOffsetMethod(double val) {
+    print('offset : ' + offset.value.toString());
+    offset.value = val;
+  }
 
   @override
   _PinterestGridState createState() => _PinterestGridState();
 }
 
+class DoubleHolder {
+  double value = 0.0;
+}
+
 class _PinterestGridState extends State<PinterestGrid> {
   List<ImageData> listOfImage;
+  ScrollController controller;
 
   Future<String> getEmailUser() async {
     SharedPreferences memory = await SharedPreferences.getInstance();
@@ -45,20 +63,47 @@ class _PinterestGridState extends State<PinterestGrid> {
         email: widget.userEmail, binderName: widget.binderName);
   }
 
+  Future<List<ImageData>> getAllImageFromServer() async {
+    return await ImageData.getAllImageDataFromServer();
+  }
+
+  image() {
+    widget.isAll
+        ? getAllImageFromServer().then((value) {
+            listOfImage = value;
+            setState(() {});
+          })
+        : setListofImage().then((value) {
+            listOfImage = value;
+            setState(() {});
+          });
+  }
+
   @override
   void initState() {
-    setListofImage().then((value) {
-      listOfImage = value;
-      setState(() {});
-    });
+    controller = ScrollController()..addListener(_scrollListener);
+    image();
 
     super.initState();
   }
 
+  //
+
+  void _scrollListener() {
+    widget.setOffsetMethod(controller.position.pixels);
+  }
+
+  void _forceScroll(double offset) {
+    controller.jumpTo(offset);
+    print('forceScroll to : ' + offset.toString());
+  }
+
+  //
+
   @override
   Widget build(BuildContext context) {
     setState(() {
-      listOfImage = ImageData.dataImg;
+      listOfImage = widget.isAll ? ImageData.allImage : ImageData.dataImg;
     });
     // damn 👎 comments , but it works 👍.
     // print("from daftarcat.dart : ${widget.binderName}");
@@ -66,17 +111,16 @@ class _PinterestGridState extends State<PinterestGrid> {
     // print(
     //     "Length of ListofImage in daftarcat.dart : ${ImageData.dataImg == null ? 0 : ImageData.dataImg.length}");
 
-    return buildCustomScrollView();
+    return buildCustomScrollView(listOfImage);
   }
 
-  Widget buildCustomScrollView() {
+  Widget buildCustomScrollView(List<ImageData> data) {
     List<Widget> children = [];
-    for (var image in listOfImage) {
+    for (var image in data) {
       children.add(ImageCard(
         imageData: image,
       ));
     }
-    Widget child = buildStaggeredGridView();
     return Container(
       child: CustomScrollView(
         primary: false,
@@ -95,19 +139,24 @@ class _PinterestGridState extends State<PinterestGrid> {
     );
   }
 
-  Widget buildStaggeredGridView() {
+  Widget buildContainer() {
     return StaggeredGridView.countBuilder(
-      physics: ScrollPhysics(),
+      controller: controller,
       crossAxisCount: 2,
       itemCount: listOfImage == null ? 0 : listOfImage.length,
-      itemBuilder: (context, index) => ImageCard(
-        imageData: listOfImage[index],
+      itemBuilder: (context, index) => ListTile(
+        contentPadding: EdgeInsets.zero,
+        subtitle: Hero(
+          tag: index,
+          child: ImageCard(
+            imageData: listOfImage[index],
+          ),
+        ),
       ),
       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
       mainAxisSpacing: 8.0,
       crossAxisSpacing: 8.0,
     );
-    ;
   }
 }
 

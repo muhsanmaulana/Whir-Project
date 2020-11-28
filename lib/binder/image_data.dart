@@ -6,7 +6,7 @@ class ImageData {
   final String id;
   final String imageUrl;
   static List<dynamic> dataImg;
-  static List<dynamic> allImage;
+  static List<ImageData> allImage = [];
 
   const ImageData({
     @required this.id,
@@ -40,15 +40,15 @@ class ImageData {
       );
     }
     // print("Image_Data 🔥 : ${listImage[0].imageUrl}");
-    // dataImg = listImage;
+    dataImg = listImage;
     return listImage;
   }
 
   static Future<List<ImageData>> getAllImageDataFromServer() async {
-    CollectionReference bindersRef = Firestore.instance.collection("binders");
+    CollectionReference bindersRef = Firestore.instance.collection("Binders");
     CollectionReference usersRef = Firestore.instance.collection("users");
 
-    // Get all users email
+// Get all users email
     var usersResult = await usersRef.getDocuments();
     List<String> usersEmail = [];
 
@@ -57,28 +57,48 @@ class ImageData {
     }
     print("Get All Email from server , From Image_data : ${usersEmail} ");
 
-    // for all user in usersEmail get all binder
+// for all user in usersEmail get all binder
     for (var email in usersEmail) {
       var bindersResult = await bindersRef.document(email).get();
-      var binderName = [];
-      for (var binder in bindersResult.data.values) {
-        binderName.add(binder.toString());
+      List<String> binderName = [];
+
+      if (bindersResult.data != null) {
+        bindersResult.data.forEach((key, value) {
+          binderName = [...binderName, ...value];
+        });
       }
+
+      // for (var binder in bindersResult.data.values) {
+      //   binderName.add(binder.toString());
+      // }
 
       print("$email : $binderName");
 
-      for (var binder in binderName) {
-        List<ImageData> temp =
-            await getAllImageData(email: email, binderName: binder);
-        allImage = [...allImage, ...temp];
+      if (binderName != null) {
+        print("binderName length : ${binderName.length}");
+
+        if (binderName.length != 0) {
+          binderName.forEach((element) {
+            // List<ImageData> temp =
+            //     await getAllImageData(email: email, binderName: element);
+            // allImage = [...allImage, ...temp];
+
+            getAllImageData(email: email, binderName: element).then((value) {
+              print("I'm inside");
+              for (var data in value) {
+                allImage.add(data);
+              }
+            });
+          });
+        }
       }
     }
 
-    // if (email == null) {
-    //   AlertDialog(
-    //     content: Text("Null Email"),
-    //   );
-    // }
+// if (email == null) {
+// AlertDialog(
+// content: Text("Null Email"),
+// );
+// }
 
     print("all Image_Data 🔥 : $allImage");
 

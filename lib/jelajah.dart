@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hello_world/binder/daftarcat.dart';
 
 class Jelajah extends StatefulWidget {
-  final String userEmail;
-
-  const Jelajah({this.userEmail});
   @override
   _JelajahState createState() => _JelajahState();
 }
@@ -18,6 +15,8 @@ class _JelajahState extends State<Jelajah> {
           backgroundColor: Colors.red,
           elevation: 0.0,
         ),
-        body: PinterestGrid());
+        body: PinterestGrid(
+          isAll: true,
+        ));
   }
 }
