@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:hello_world/multiform.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
 import 'image_data.dart';
+import 'package:http/http.dart' as http;
 
 class StandardGrid extends StatelessWidget {
   const StandardGrid({Key key}) : super(key: key);
@@ -26,6 +29,7 @@ class PinterestGrid extends StatefulWidget {
   final String userEmail;
   final String binderName;
   final bool isAll;
+
   PinterestGrid({this.binderName, this.userEmail, this.isAll = false});
 
   final DoubleHolder offset = new DoubleHolder();
@@ -51,6 +55,7 @@ class DoubleHolder {
 class _PinterestGridState extends State<PinterestGrid> {
   List<ImageData> listOfImage;
   ScrollController controller;
+  var filePath;
 
   Future<String> getEmailUser() async {
     SharedPreferences memory = await SharedPreferences.getInstance();
@@ -150,8 +155,82 @@ class ImageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(5.0),
-      child: Image.network(imageData.imageUrl, fit: BoxFit.cover),
-    );
+        borderRadius: BorderRadius.circular(5.0),
+        child: GestureDetector(
+          // handle your image tap here
+          child: Image.network(imageData.imageUrl, fit: BoxFit.cover),
+          onTap: () {
+            showImageSheet(context, imageData.imageUrl);
+          },
+        ));
+  }
+
+  void showImageSheet(context, String imageUrl) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0))),
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Column(
+                children: [
+                  //SizedBox(height: 10.0),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    // child: Image.network(
+                    //   imageUrl,
+                    //   fit: BoxFit.fitWidth,
+                    // ),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover, image: NetworkImage(imageUrl)),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0))),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Container(
+                        alignment: Alignment.topLeft,
+                        child: InkWell(
+                            child: Text("Simpan ke perangkat",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold)),
+                            onTap: () {
+                              _onImageSaveButtonPressed(imageUrl);
+                            })),
+                  )
+                ],
+              ));
+        });
+  }
+
+  void _onImageSaveButtonPressed(String imageUrl) async {
+    var response = await http.get(imageUrl);
+    debugPrint(response.statusCode.toString());
+    var filePath =
+        await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
+
+    // print("_onImageSaveButtonPressed");
+    // var response = await http.get(imageUrl);
+
+    // debugPrint(response.statusCode.toString());
+
+    // var filePath =
+    //     await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
+
+    // var savedFile = File.fromUri(Uri.file(filePath));
+    // setState(() {
+    //   _imageFile = Future<File>.sync(() => savedFile);
+    // });
   }
 }
