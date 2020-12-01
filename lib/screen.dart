@@ -4,6 +4,7 @@ import 'package:hello_world/catatan.dart';
 import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
 import 'package:hello_world/uploaddetail.dart';
+import 'package:hello_world/visit_profile.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +51,7 @@ class _NavagationState extends State<Navagation> {
         userEmail: widget.userEmail,
       ),
       Jelajah(),
-      Detail(),
+      Visit(),
       Notifikasi(),
       ProfilePage(),
     ];
