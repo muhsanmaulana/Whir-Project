@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hello_world/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +29,9 @@ class _SingInState extends State<SingIn> {
         MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
             ? MediaQuery.of(context).size.height
             : MediaQuery.of(context).size.width;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFEE613A), //or set color with: Color(0xFF0000FF)
+    ));
 
     return Scaffold(
       body: SingleChildScrollView(
