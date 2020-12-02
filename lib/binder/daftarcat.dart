@@ -1,8 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:hello_world/downloaded_image_preview.dart';
 import 'package:hello_world/multiform.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker_saver/image_picker_saver.dart';
+import 'package:sweetalert/sweetalert.dart';
 import 'image_data.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,12 +41,10 @@ class PinterestGrid extends StatefulWidget {
   final DoubleHolder offset = new DoubleHolder();
 
   double getOffsetMethod() {
-    // print('getOffsetMethod : ' + offset.value.toString());
     return offset.value;
   }
 
   void setOffsetMethod(double val) {
-    // print('offset : ' + offset.value.toString());
     offset.value = val;
   }
 
@@ -92,29 +96,19 @@ class _PinterestGridState extends State<PinterestGrid> {
     super.initState();
   }
 
-  //
-
   void _scrollListener() {
     widget.setOffsetMethod(controller.position.pixels);
   }
 
   void _forceScroll(double offset) {
     controller.jumpTo(offset);
-    // print('forceScroll to : ' + offset.toString());
   }
-
-  //
 
   @override
   Widget build(BuildContext context) {
     setState(() {
       listOfImage = widget.isAll ? ImageData.allImage : ImageData.dataImg;
     });
-    // damn 👎 comments , but it works 👍.
-    // print("from daftarcat.dart : ${widget.binderName}");
-    // setState(() {});
-    // print(
-    //     "Length of ListofImage in daftarcat.dart : ${ImageData.dataImg == null ? 0 : ImageData.dataImg.length}");
 
     return buildCustomScrollView(listOfImage);
   }
@@ -157,7 +151,6 @@ class ImageCard extends StatelessWidget {
     return ClipRRect(
         borderRadius: BorderRadius.circular(5.0),
         child: GestureDetector(
-          // handle your image tap here
           child: Image.network(imageData.imageUrl, fit: BoxFit.cover),
           onTap: () {
             showImageSheet(context, imageData.imageUrl);
@@ -178,14 +171,9 @@ class ImageCard extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.8,
               child: Column(
                 children: [
-                  //SizedBox(height: 10.0),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.6,
-                    // child: Image.network(
-                    //   imageUrl,
-                    //   fit: BoxFit.fitWidth,
-                    // ),
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             fit: BoxFit.cover, image: NetworkImage(imageUrl)),
@@ -200,13 +188,63 @@ class ImageCard extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                     child: Container(
                         alignment: Alignment.topLeft,
-                        child: InkWell(
-                            child: Text("Simpan ke perangkat",
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold)),
-                            onTap: () {
-                              _onImageSaveButtonPressed(imageUrl);
+                        child: RaisedButton(
+                            color: Color(0xFFEE613A),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.download_rounded,
+                                  color: Colors.white,
+                                ),
+                                Text("Simpan ke perangkat",
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            onPressed: () async {
+                              // _onImageSaveButtonPressed(imageUrl);
+                              try {
+                                // Saved with this method.
+                                var imageId =
+                                    await ImageDownloader.downloadImage(
+                                        imageUrl);
+                                if (imageId == null) {
+                                  return;
+                                }
+
+                                // Below is a method of obtaining saved image information.
+                                var fileName =
+                                    await ImageDownloader.findName(imageId);
+                                var path =
+                                    await ImageDownloader.findPath(imageId);
+                                var size =
+                                    await ImageDownloader.findByteSize(imageId);
+                                var mimeType =
+                                    await ImageDownloader.findMimeType(imageId);
+
+                                GallerySaver.saveImage(path);
+
+                                SweetAlert.show(
+                                  context,
+                                  title: "Image Saved!",
+                                  style: SweetAlertStyle.success,
+                                );
+
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (_) => PreviewDownloadedImage(
+                                              path: path,
+                                            )));
+
+                                print(
+                                    "fileName : $fileName, \n path : $path \n size : $size , \n mimeType : $mimeType");
+                              } on PlatformException catch (error) {
+                                print(error);
+                              }
                             })),
                   )
                 ],
@@ -219,18 +257,5 @@ class ImageCard extends StatelessWidget {
     debugPrint(response.statusCode.toString());
     var filePath =
         await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
-
-    // print("_onImageSaveButtonPressed");
-    // var response = await http.get(imageUrl);
-
-    // debugPrint(response.statusCode.toString());
-
-    // var filePath =
-    //     await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
-
-    // var savedFile = File.fromUri(Uri.file(filePath));
-    // setState(() {
-    //   _imageFile = Future<File>.sync(() => savedFile);
-    // });
   }
 }

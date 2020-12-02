@@ -1,3 +1,0 @@
-# Multiform
-1. Jika sudah menambahkan satu atau bebarapa folder/binder baru, kemudian klik "Tambah Binder" dan submit , maka data yang sebelumnya akan terhapus dan ditimpa dengan data yang baru.
-2. 
