@@ -5,7 +5,6 @@ import 'package:hello_world/notifikasi.dart';
 import 'package:hello_world/profile.dart';
 import 'package:hello_world/uploaddetail.dart';
 import 'package:hello_world/visit_profile.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,14 +99,11 @@ class _NavagationState extends State<Navagation> {
   }
 
   void _optionGambar(context) {
-    File _image;
-    String filename;
     Future getImage() async {
+      // ignore: deprecated_member_use
       final image = await ImagePicker.pickImage(source: ImageSource.camera);
 
-      setState(() {
-        _image = image;
-      });
+      setState(() {});
 
       Navigator.push(
         context,
@@ -120,11 +116,10 @@ class _NavagationState extends State<Navagation> {
     }
 
     Future getGalery() async {
+      // ignore: deprecated_member_use
       final image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-      setState(() {
-        _image = image;
-      });
+      setState(() {});
       Navigator.push(
         context,
         CupertinoPageRoute(

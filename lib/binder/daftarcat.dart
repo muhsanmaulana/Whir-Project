@@ -1,16 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hello_world/downloaded_image_preview.dart';
-import 'package:hello_world/multiform.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:sweetalert/sweetalert.dart';
 import 'image_data.dart';
-import 'package:http/http.dart' as http;
 
 class StandardGrid extends StatelessWidget {
   const StandardGrid({Key key}) : super(key: key);
@@ -98,10 +94,6 @@ class _PinterestGridState extends State<PinterestGrid> {
 
   void _scrollListener() {
     widget.setOffsetMethod(controller.position.pixels);
-  }
-
-  void _forceScroll(double offset) {
-    controller.jumpTo(offset);
   }
 
   @override
@@ -250,12 +242,5 @@ class ImageCard extends StatelessWidget {
                 ],
               ));
         });
-  }
-
-  void _onImageSaveButtonPressed(String imageUrl) async {
-    var response = await http.get(imageUrl);
-    debugPrint(response.statusCode.toString());
-    var filePath =
-        await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
   }
 }

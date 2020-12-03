@@ -28,7 +28,7 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    print("User : ${user} , from wrapper.dart");
+    print("User : $user , from wrapper.dart");
 
     if (user == null) {
       return Authenticate();

@@ -152,11 +152,6 @@ class _DetailState extends State<Detail> {
               Container(),
               FlatButton(
                   onPressed: () async {
-                    final Future<FirebaseApp> _initialization =
-                        Firebase.initializeApp();
-                    CollectionReference collection =
-                        Firestore.instance.collection("Binders");
-
                     FirebaseStorage _storage = FirebaseStorage.instance;
 
                     List<String> splitPath = widget.image.path.split('/');
