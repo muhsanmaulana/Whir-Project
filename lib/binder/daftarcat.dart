@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hello_world/multiform.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker_saver/image_picker_saver.dart';
+import 'package:sweetalert/sweetalert.dart';
 import 'image_data.dart';
 import 'package:http/http.dart' as http;
 
@@ -200,13 +204,58 @@ class ImageCard extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                     child: Container(
                         alignment: Alignment.topLeft,
-                        child: InkWell(
-                            child: Text("Simpan ke perangkat",
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold)),
-                            onTap: () {
-                              _onImageSaveButtonPressed(imageUrl);
+                        child: RaisedButton(
+                            color: Color(0xFFEE613A),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.download_rounded,
+                                  color: Colors.white,
+                                ),
+                                Text("Simpan ke perangkat",
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            onPressed: () async {
+                              // _onImageSaveButtonPressed(imageUrl);
+                              try {
+                                // Saved with this method.
+                                var imageId =
+                                    await ImageDownloader.downloadImage(
+                                        imageUrl);
+                                if (imageId == null) {
+                                  return;
+                                }
+
+                                // Below is a method of obtaining saved image information.
+                                var fileName =
+                                    await ImageDownloader.findName(imageId);
+                                var path =
+                                    await ImageDownloader.findPath(imageId);
+                                var size =
+                                    await ImageDownloader.findByteSize(imageId);
+                                var mimeType =
+                                    await ImageDownloader.findMimeType(imageId);
+
+                                SweetAlert.show(
+                                  context,
+                                  title: "Image Saved!",
+                                  style: SweetAlertStyle.success,
+                                );
+
+                                // Navigator.push(
+                                //     context,
+                                //     CupertinoPageRoute(
+                                //         builder: (_) => PreviewDownloadedImage(
+                                //               path: path,
+                                //             )));
+                              } on PlatformException catch (error) {
+                                print(error);
+                              }
                             })),
                   )
                 ],

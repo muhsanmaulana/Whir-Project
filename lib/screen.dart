@@ -51,7 +51,6 @@ class _NavagationState extends State<Navagation> {
         userEmail: widget.userEmail,
       ),
       Jelajah(),
-      Visit(),
       Notifikasi(),
       ProfilePage(),
     ];
@@ -80,10 +79,6 @@ class _NavagationState extends State<Navagation> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.explore),
                 label: 'Jelajah',
-                backgroundColor: Colors.red),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.circle),
-                label: 'Linimasa',
                 backgroundColor: Colors.red),
             BottomNavigationBarItem(
                 icon: Icon(Icons.notifications),
